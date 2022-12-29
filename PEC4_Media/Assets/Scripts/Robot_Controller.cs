@@ -1,51 +1,66 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Robot_Controller : MonoBehaviour
 {
     public float moveInput;
+    public string mapName;
 
-    private PlayerInput playerInput;
+    public KeyCode moveLeftKey;
+    public KeyCode moveRightKey;
+    public KeyCode attackKey;
+    public KeyCode defenseKey;
 
-    private void Awake()
-    {
-        playerInput = GetComponent<PlayerInput>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        playerInput.currentActionMap = "Player1";
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        
+        CheckInputs();
     }
 
-    public void OnMove(InputAction.CallbackContext context)
+    private void CheckInputs()
     {
-        moveInput = context.ReadValue<float>();
-
-        Debug.Log("Movement: " + moveInput + " name: " + this.name);
-    }
-
-    public void OnAttack(InputAction.CallbackContext context)
-    {
-        if (context.performed)
+        // Left movement control
+        if (Input.GetKeyDown(moveLeftKey))
         {
-            Debug.Log("Attack: name: " + this.name);
+            print("Left key pushed by " + name);
+
+            moveInput = 1;
         }
+        else if (Input.GetKeyUp(moveLeftKey))
+        {
+            print("Left key released by " + name);
+
+            moveInput = 0;
+        }
+
+        // Right movement control
+        if (Input.GetKeyDown(moveRightKey))
+        {
+            print("Right key pushed by " + name);
+
+            moveInput = -1;
+        }
+        else if (Input.GetKeyUp(moveRightKey))
+        {
+            print("Right key released by " + name);
+
+            moveInput = 0;
+        }
+
+
+        // Attack control
+        if (Input.GetKeyDown(attackKey))
+        {
+            print("Attack key pushed by " + name);
+        }
+
+        // Defense control
+        if (Input.GetKeyDown(defenseKey))
+        {
+            print("Defense key pushed  by " + name);
+        }
+
+        print("Move input: " + moveInput);
     }
 
-    public void OnDefend(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            Debug.Log("Attack: name: " + this.name);
-        }
-    }
 }
