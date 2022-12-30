@@ -5,16 +5,34 @@ using UnityEngine;
 public class Robot_Controller : MonoBehaviour
 {
     public float moveInput;
-    public string mapName;
+    private Vector3 movement;
+    public float movementSpeed;
 
     public KeyCode moveLeftKey;
     public KeyCode moveRightKey;
     public KeyCode attackKey;
     public KeyCode defenseKey;
 
+    private Rigidbody rb;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
     void Update()
     {
+        // Check player inputs
         CheckInputs();
+
+        // Calculate movement vector 
+        CalculateMovement();
+    }
+
+    private void FixedUpdate()
+    {
+        // Move character
+        MoveCharacter(movement);
     }
 
     private void CheckInputs()
@@ -63,4 +81,15 @@ public class Robot_Controller : MonoBehaviour
         print("Move input: " + moveInput);
     }
 
+    private void CalculateMovement()
+    {
+        movement = new Vector3(0, 0, moveInput).normalized;
+    }
+
+    private void MoveCharacter(Vector3 direction)
+    {
+        // We multiply the 'speed' variable to the Rigidbody's velocity...
+        // and also multiply 'Time.fixedDeltaTime' to keep the movement consistant on all devices
+        rb.velocity = - direction * movementSpeed * Time.fixedDeltaTime;
+    }
 }
